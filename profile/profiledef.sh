@@ -20,5 +20,7 @@ file_permissions=(
   ["/etc/pam.d/sddm-autologin"]="0:0:644"
   ["/etc/sudoers.d/airlys"]="0:0:440"
   ["/usr/local/bin/airlys-firstrun.sh"]="0:0:755"
+  ["/usr/bin/airalang"]="0:0:755"
+  ["/usr/bin/airalang3"]="0:0:755"
   ["/root"]="0:0:750"
 )

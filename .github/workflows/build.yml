@@ -32,7 +32,7 @@ jobs:
           pacman-key --init
           pacman-key --populate archlinux
           pacman -Sy --noconfirm archlinux-keyring
-          pacman -Syu --noconfirm archiso git github-cli
+          pacman -Syu --noconfirm archiso git github-cli clang make
 
       - name: Build Airlys OS S1 Live ISO
         run: |
@@ -61,6 +61,17 @@ jobs:
           
           # 6. Overlay our Airlys OS S1 branding, wallpapers, autologin and configs
           cp -r profile/airootfs/* build_profile/airootfs/
+          
+          # 6.1. Build & pre-install AiraLang S1 Duo Native Systems Engine into Airlys OS
+          echo "Building AiraLang S1 Duo Native Engine for Airlys OS..."
+          git clone --depth 1 https://github.com/adameehanairagroup/Airalang.git /tmp/airalang-build
+          cd /tmp/airalang-build/s1duo
+          make
+          mkdir -p "$GITHUB_WORKSPACE/build_profile/airootfs/usr/bin"
+          cp bin/airalang "$GITHUB_WORKSPACE/build_profile/airootfs/usr/bin/airalang"
+          cp bin/airalang "$GITHUB_WORKSPACE/build_profile/airootfs/usr/bin/airalang3"
+          chmod 755 "$GITHUB_WORKSPACE/build_profile/airootfs/usr/bin/airalang" "$GITHUB_WORKSPACE/build_profile/airootfs/usr/bin/airalang3"
+          cd "$GITHUB_WORKSPACE"
           
           # 7. Pre-create airlys user with passwordless PAM autologin directly in airootfs
           echo "airlys:x:1000:1000:Airlys User:/home/airlys:/bin/bash" >> build_profile/airootfs/etc/passwd
